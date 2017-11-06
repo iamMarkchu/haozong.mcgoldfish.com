@@ -18,7 +18,7 @@ class MusicController extends Controller
         $name = $request->input('name');
         if(!empty($name))
         {
-            $article = $music->where('name', 'like', '%'.$name.'%');
+            $music = $music->where('name', 'like', $name.'%');
         }
         return $music->orderBy('created_at', 'desc')->paginate($request->input('limit'));
     }
