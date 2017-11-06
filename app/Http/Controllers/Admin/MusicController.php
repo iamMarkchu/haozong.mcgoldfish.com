@@ -15,10 +15,10 @@ class MusicController extends Controller
     public function index(Request $request)
     {
         $music = new Music();
-        $title = $request->input('name');
-        if(!empty($title))
+        $name = $request->input('name');
+        if(!empty($name))
         {
-            $article = $music->where('title', 'like', '%'.$title.'%');
+            $article = $music->where('name', 'like', '%'.$name.'%');
         }
         return $music->orderBy('created_at', 'desc')->paginate($request->input('limit'));
     }
