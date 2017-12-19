@@ -16,9 +16,13 @@ Route::get('/', function () {
 });
 Route::get('music', 'Admin\MusicController@index');
 // Admin
-Route::group(['namespace' => 'Admin', 'prefix' => 'admin'], function(){
+Route::group(['namespace' => 'Admin', 'prefix' => 'admin', 'middleware' => ['auth']], function(){
     Route::get('/', function(){
         return view('admin/home');
     });
     Route::resource('music', 'MusicController');
 });
+
+Auth::routes();
+
+Route::get('/home', 'HomeController@index')->name('home');

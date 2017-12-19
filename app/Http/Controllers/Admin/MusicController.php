@@ -4,9 +4,16 @@ namespace App\Http\Controllers\Admin;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Music;
+use App\Http\Requests\MusicRequest;
+use App\Models\Music;
+
 class MusicController extends Controller
 {
+    protected $music;
+    public function __construct(Music $music)
+    {
+        $this->music = $music;
+    }
     /**
      * Display a listing of the resource.
      *
@@ -39,15 +46,12 @@ class MusicController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(MusicRequest $request)
     {
-        $music = new Music();
-        $music->name = $request->name;
-        $music->lyrics = $request->lyrics;
-        $music->image = $request->image;
-        $music->music_file = $request->music_file;
-        $music->author = $request->author;
-        echo $music->save();
+        $data = $request->all();
+        $this->music->fill($data);
+        $this->music->save();
+        return response()->json(['message' => 'success']);
     }
 
     /**
@@ -58,7 +62,7 @@ class MusicController extends Controller
      */
     public function show($id)
     {
-        //
+        return $this->music->find($id);
     }
 
     /**
@@ -79,9 +83,11 @@ class MusicController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(MusicRequest $request, $id)
     {
-        //
+        $data = $request->only(['name', 'lyrics', 'image', 'music_file', 'author']);
+        $this->music->findOrFail($id)->fill($data)->save();
+        return response()->json(['message' => 'success']);
     }
 
     /**
